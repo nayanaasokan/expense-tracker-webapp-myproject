@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        #na{
+            text-align:left;
+            color:beige;
+            margin-left:410px;
+            background-color: cornflowerblue;
+            width:240px;
+            padding-left:20px;
+            border: 1px solid black;
+            border-radius: 35px;
+            box-shadow: 5px 3px 10px black;
+        }
+        body{
+            background-color: #FFDEE9;
+             background-image: linear-gradient(0deg, #FFDEE9 0%, #B5FFFC 100%);
+             background-repeat: no-repeat;
+             background-size:100% 1500px;
+            }
+        h1{text-decoration:underline;}
+        #bt{background-color: cadetblue;color:white;margin-left:685px}
+        #ht{background-color: dimgrey;color: bisque;margin-left:320px;margin-bottom: 10px;}
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg" style="background-color: rgb(207, 183, 228);">
+        <div class="container-fluid">
+          
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-link active fs-5 ms-3" aria-current="page" href="{% url 'transaction-list' %}">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link fs-5 ms-3" href="{% url 'transaction-add' %}">Add transaction</a>
+              </li>
+              <!-- <li class="nav-item">
+                <a class="nav-link" href="#">Pricing</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+              </li> -->
+            </ul>
+            
+            <form class="d-flex" style="margin-left: 1100px;"> 
+              <a href="{% url 'signout' %}" class="btn me-2 text-white" style="background-color: rgb(139, 200, 214);">Log out</a>
+          </form>
+      
+          </div>
+        </div>
+      </nav>
+    
+
+<h1 class="fw-bolder d-flex justify-content-center">Welcome<font color="red">{{request.user}}</font></h1><br><br>
+<!-- <div id="na">
+<h5>{% for item in type_total %}
+Total {{item.type}}:{{item.type_sum}}<br>
+{%endfor%}
+</h5>
+</div> -->
+
+
+<div class="container d-flex justify-content-center gap-4 ">
+    {%for item in type_total%}
+        {%if item.type == 'expenses'%}
+        <div class="border border-secondary p-4 rounded alert alert-danger">
+            <h3>Total {{item.type}}({{item.type_count}}):{{item.type_sum}}</h3>
+
+        </div>
+        {%else%}
+        <div class="border border-secondary p-4 rounded alert alert-success">
+            <h3>Total {{item.type}}({{item.type_count}}):{{item.type_sum}}</h3>
+
+        </div>
+        {%endif%}
+{%endfor%}
+</div>
+
+<div class="container d-flex justify-content-around">
+
+    {% for item in category_total %}
+    <div class="border border-dark alert alert-warning">
+        {{item.category}}({{item.cat_count}}):{{item.cat_sum}}
+    </div>
+    {%endfor%}
+</div>
+
+<div class="container" style="height:400px;width:400px">
+    <canvas id="CategoryChart"></canvas>
+</div>
+
+
+
+
+    <div class="container mt-5">
+        {% if messages %}
+            {% for m in messages %}
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong>{{m}}</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                  </div>
+            {% endfor %}
+        {% endif %}
+        <a href="{% url 'transaction-add' %}" class="btn rounded-pill shadow" id="ht">add transaction</a>
+        {%for t in data%}
+        <div class="row mb-2">
+            <div class="col-3"></div>
+            <div class="col-6 border rounded-pill p-3 shadow bg-light">
+               <div class="d-flex  fw-bolder justify-content-around" id="ty">
+                <div> {{t.title}}</div>
+                <div> {{t.category}}</div>
+                <div>  {{t.amount}}</div>
+                <div>
+                    <a href="{% url 'transaction-edit' t.id %}" class="btn btn-warning">edit</a>
+                    <a href="{% url 'transaction-detail' t.id %}" class="btn btn-secondary">view</a>
+                    <a href="{% url 'transaction-delete' t.id %}" class="btn btn-danger">delete</a>
+                </div>
+               </div>
+            </div>
+            <div class="col-3"></div>
+        </div>
+        {%endfor%}
+    </div>
+    <a href="{% url 'signout' %}" class="btn rounded-pill" id="bt">logout</a>
+    
+
+    
+    
+    
+
+</body>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        var ctx = document.getElementById('CategoryChart').getContext('2d');
+        var categoryChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: [{% for category in category_total %}"{{ category.category }}",{% endfor %}],
+                datasets: [{
+                    label: 'Category Totals',
+                    data: [{% for category in category_total %}{{ category.cat_sum }},{% endfor %}],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                animation: {
+                    duration: 2000,
+                    easing: 'easeInOutQuart'
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+
+
+</html>

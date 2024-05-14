@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        body{
+            background-color: #FFDEE9;
+             background-image: linear-gradient(0deg, #FFDEE9 0%, #B5FFFC 100%);
+             background-repeat: no-repeat;
+             background-size:100% 1500px;
+            }
+        .col-8{background-color: cadetblue;border-radius: 50px;}
+        #y{margin-top: 150px;}
+        #t{margin-left:300px;height:50px;width:200px;border-radius: 40px;font-size:larger;box-shadow:5px 4px 10px black}
+        h1{font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif}
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+</head>
+<body>
+    
+    <div class="container mt-5">
+
+        {% if messages %}
+            {% for m in messages %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>{{m}}</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                  </div>
+            {% endfor %}
+        {% endif %}
+        <div class="row" id="y">
+            <div class="col-2"></div>
+            <div class="col-8 p-4 shadow border-2">
+                <h1 class="text-center fw-bolder text-light">Sign In</h1>
+                <form action="" method="post" enctype="multipart/form-data" class="text-light">
+                    {%csrf_token%}
+                    {%for f in form%}
+                    <div class="mb-4">
+                        {{f.label_tag}}
+                        <div>{{f}}</div>
+                    </div>
+                    {%endfor%}
+
+                    <button type="submit" class="bg-warning fw-bolder" id="t">Sign in</button>
+
+                </form>
+            </div>
+            <div class="col-2"></div>
+        </div>
+    </div>
+
+</body>
+</html>

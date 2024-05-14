@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block main_block%}
+<div class="container d-flex justify-content-center">
+
+  <div class="card" style="width: 18rem;">
+      <div class="card-header">
+        Title :{{data.title}}
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">Type :{{data.type}}</li>
+        <li class="list-group-item">category:{{data.category}}</li>
+        <li class="list-group-item">date {{data.created_date}}</li>
+        <li class="list-group-item">Owner {{data.user}}</li>
+        <li class="list-group-item">Amount {{data.amount}}</li>
+      </ul>
+    </div>
+</div>
+{%endblock%}
